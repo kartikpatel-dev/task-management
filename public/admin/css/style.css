@@ -1,0 +1,73 @@
+.note-editor.note-frame .note-editing-area .note-editable { min-height: 200px; }
+.max-height-150 { max-height: 150px; }
+.post-list-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.post-list-item .btn {
+    position: absolute;
+    right: 0;
+}
+.avatar-img-group {
+    align-items: center; 
+    grid-column-gap: 10px;
+}
+.avatar-img {
+    height: 100px;
+    width: 100px;
+    border-radius: 100%;
+}
+.avatar-img-2 {
+    height: 50px;
+    width: 50px;
+    border-radius: 100% !important;
+}
+
+.reference_person_main {
+    position: relative;
+}
+.reference_person_list {
+    background-color: var(--bs-gray-300);
+    position: absolute;
+    width: 100%;
+    display: inline-block;
+    max-height: 170px;
+    overflow-y: auto;
+    z-index: 9;
+}
+.reference_person_list ul {
+    list-style-type: none;
+    padding-left: 0;
+    border: 1px solid var(--bs-gray-500);
+    margin-bottom: 0;
+}
+.reference_person_list ul li {
+    padding: 5px;
+    border-bottom: 1px solid var(--bs-gray-600);
+    cursor: pointer;
+}
+.reference_person_list ul li:last-child {
+    border-bottom: 0;
+}
+.reference_person_list ul li:hover {
+    background-color: var(--bs-gray-500);
+}
+
+.table thead th {
+    vertical-align: middle;
+}
+
+.gallery-img {
+    width: 100px;
+    height: 100px;
+}
+.custom-sorting {
+    cursor: pointer;
+}
+
+.users_waiting_approval_inner {
+    max-height: 300px;
+    overflow-y: scroll;
+}
