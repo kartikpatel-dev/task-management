@@ -5,10 +5,10 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\Interfaces\RoleRepositoryInterface;
 use App\Repositories\RoleRepository;
-use App\Repositories\Interfaces\PermissionRepositoryInterface;
-use App\Repositories\PermissionRepository;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Repositories\CategoryRepository;
+use App\Repositories\Interfaces\ProjectRepositoryInterface;
+use App\Repositories\ProjectRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -25,13 +25,13 @@ class RepositoryServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            PermissionRepositoryInterface::class,
-            PermissionRepository::class
+            CategoryRepositoryInterface::class,
+            CategoryRepository::class
         );
 
         $this->app->bind(
-            CategoryRepositoryInterface::class,
-            CategoryRepository::class
+            ProjectRepositoryInterface::class,
+            ProjectRepository::class
         );
     }
 

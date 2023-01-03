@@ -50,9 +50,11 @@
 
 <body class="hold-transition sidebar-mini layout-fixed">
     @php
-        $roles = Auth::user()
-            ->role->pluck('name')
-            ->toArray();
+        $roles = !empty(Auth::user()->role)
+            ? Auth::user()
+                ->role->pluck('name')
+                ->toArray()
+            : [];
         
         $modules = !empty(Auth::user()->modules)
             ? Auth::user()

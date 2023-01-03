@@ -1,27 +1,26 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Repositories\Interfaces\CategoryRepositoryInterface;
+use App\Repositories\Interfaces\ProjectRepositoryInterface;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use App\Http\Requests\CategoryRequest;
-use App\Traits\CategoryTypeTrait;
+use App\Http\Requests\ProjectRequest;
+use App\Repositories\Interfaces\CategoryRepositoryInterface;
 
-class CategoryController extends Controller
+class ProjectController extends Controller
 {
-    private $categoryRepository;
-    use CategoryTypeTrait;
+    private $projectRepository, $categoryRepository;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(CategoryRepositoryInterface $categoryRepository)
+    public function __construct(ProjectRepositoryInterface $projectRepository, CategoryRepositoryInterface $categoryRepository)
     {
+        $this->projectRepository = $projectRepository;
         $this->categoryRepository = $categoryRepository;
     }
 
@@ -32,20 +31,10 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        // $RS_Results = $this->categoryRepository->all();
+        $RS_Results = $this->projectRepository->all();
         // dd($RS_Results);
-        // dd($RS_Results[5]->parents->pluck('name')->toArray());
-        
-        if ($request->ajax()) {
-            $RS_Results = $this->categoryRepository->all();
 
-            return response()
-                ->json([
-                    'RS_Results' => view('admin.categories.list', compact('RS_Results'))->render()
-                ]);
-        } else {
-            return view('admin.categories.index');
-        }
+        return view('projects.index', compact('RS_Results'));
     }
 
     /**
@@ -55,10 +44,9 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $RS_Categoires = $this->categoryRepository->all();
-        $RS_CategoryTypes = $this->categoryTypes();
+        $RS_Result_Cats = $this->categoryRepository->all();
 
-        return view('admin.categories.create-edit', compact('RS_Categoires', 'RS_CategoryTypes'));
+        return view('projects.create-edit', compact('RS_Result_Cats'));
     }
 
     /**
@@ -67,17 +55,17 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoryRequest $request)
+    public function store(ProjectRequest $request)
     {
         // Retrieve the validated input data...
         $request->validated();
 
-        $response = $this->categoryRepository->store($request);
+        $response = $this->projectRepository->store($request);
 
         Session::flash('messageType', $response['messageType']);
         Session::flash('message', $response['message']);
 
-        return Redirect::route('admin.categories.index');
+        return Redirect::route('projects.index');
     }
 
     /**
@@ -99,11 +87,10 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $RS_Row = $this->categoryRepository->getByID($id);
-        $RS_Categoires = $this->categoryRepository->all();
-        $RS_CategoryTypes = $this->categoryTypes();
+        $RS_Result_Cats = $this->categoryRepository->all();
+        $RS_Row = $this->projectRepository->getByID($id);
 
-        return view('admin.categories.create-edit', compact('RS_Row', 'RS_Categoires', 'RS_CategoryTypes'));
+        return view('projects.create-edit', compact('RS_Result_Cats', 'RS_Row'));
     }
 
     /**
@@ -113,17 +100,17 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoryRequest $request, $id)
+    public function update(ProjectRequest $request, $id)
     {
         // Retrieve the validated input data...
         $request->validated();
 
-        $response = $this->categoryRepository->update($request, $id);
+        $response = $this->projectRepository->update($request, $id);
 
         Session::flash('messageType', $response['messageType']);
         Session::flash('message', $response['message']);
 
-        return Redirect::route('admin.categories.index');
+        return Redirect::route('projects.index');
     }
 
     /**
@@ -134,11 +121,11 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $response = $this->categoryRepository->delete($id);
+        $response = $this->projectRepository->delete($id);
 
-        return response()->json([
-            'messageType' => $response['messageType'],
-            'message' => $response['message']
-        ]);
+        Session::flash('messageType', $response['messageType']);
+        Session::flash('message', $response['message']);
+
+        return Redirect::back();
     }
 }

@@ -2,22 +2,22 @@
 
 namespace App\Repositories;
 
-use App\Models\Category;
-use App\Repositories\Interfaces\CategoryRepositoryInterface;
+use App\Models\Project;
+use App\Repositories\Interfaces\ProjectRepositoryInterface;
 use Illuminate\Support\Str;
 
-class CategoryRepository implements CategoryRepositoryInterface
+class ProjectRepository implements ProjectRepositoryInterface
 {
-    private $_title = 'Category';
+    private $_title = 'Project';
 
     public function all()
     {
-        return Category::with(['projects'])->latest()->paginate();
+        return Project::with(['category'])->latest()->paginate();
     }
 
     public function getById($id)
     {
-        return Category::findOrFail($id);
+        return Project::findOrFail($id);
     }
 
     public function store($data)
@@ -63,7 +63,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         $RS_Row = $this->getByID($id);
 
         if (!empty($RS_Row->image)) {
-            Category::mediaDelete($RS_Row->image);
+            Project::mediaDelete($RS_Row->image);
         }
 
         $RS_Row->delete($id);
@@ -85,12 +85,12 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     private function _StoreUpdate($data, $id = 0)
     {
-        $RS_Row = empty($id) ? new Category() : $this->getById($id);
+        $RS_Row = empty($id) ? new Project() : $this->getById($id);
 
-        $RS_Row->name = $data->name;
-        $RS_Row->slug = Str::slug($data->name, '-');
-        $RS_Row->parent_id = !empty($data->parent_id) ? $data->parent_id : NULL;
         $RS_Row->user_id = auth()->user()->id;
+        $RS_Row->category_id = !empty($data->category_id) ? $data->category_id : NULL;
+        $RS_Row->name = $data->name;
+        $RS_Row->slug = Str::slug($data->slug, '');
         $RS_Row->description = $data->description;
 
         $RS_Row->save();
