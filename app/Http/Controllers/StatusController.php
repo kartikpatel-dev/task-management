@@ -3,25 +3,23 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Repositories\Interfaces\ProjectRepositoryInterface;
+use App\Repositories\Interfaces\StatusRepositoryInterface;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use App\Http\Requests\ProjectRequest;
-use App\Repositories\Interfaces\CategoryRepositoryInterface;
+use App\Http\Requests\StatusRequest;
 
-class ProjectController extends Controller
+class StatusController extends Controller
 {
-    private $projectRepository, $categoryRepository;
+    private $statusRepository;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(ProjectRepositoryInterface $projectRepository, CategoryRepositoryInterface $categoryRepository)
+    public function __construct(StatusRepositoryInterface $statusRepository)
     {
-        $this->projectRepository = $projectRepository;
-        $this->categoryRepository = $categoryRepository;
+        $this->statusRepository = $statusRepository;
     }
 
     /**
@@ -31,10 +29,10 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
-        $RS_Results = $this->projectRepository->all();
+        $RS_Results = $this->statusRepository->all();
         // dd($RS_Results);
 
-        return view('projects.index', compact('RS_Results'));
+        return view('categories.index', compact('RS_Results'));
     }
 
     /**
@@ -44,9 +42,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        $RS_Result_Cats = $this->categoryRepository->all();
-
-        return view('projects.create-edit', compact('RS_Result_Cats'));
+        return view('categories.create-edit');
     }
 
     /**
@@ -55,17 +51,17 @@ class ProjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProjectRequest $request)
+    public function store(StatusRequest $request)
     {
         // Retrieve the validated input data...
         $request->validated();
 
-        $response = $this->projectRepository->store($request);
+        $response = $this->statusRepository->store($request);
 
         Session::flash('messageType', $response['messageType']);
         Session::flash('message', $response['message']);
 
-        return Redirect::route('projects.index');
+        return Redirect::route('categories.index');
     }
 
     /**
@@ -76,10 +72,7 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
-        $RS_Row = $this->projectRepository->getById($id);
-        // dd($RS_Row->statuses[0]->projectIssues[0]->title);
-
-        return view('projects.show', compact('RS_Row'));
+        //
     }
 
     /**
@@ -90,10 +83,9 @@ class ProjectController extends Controller
      */
     public function edit($id)
     {
-        $RS_Result_Cats = $this->categoryRepository->all();
-        $RS_Row = $this->projectRepository->getByID($id);
+        $RS_Row = $this->statusRepository->getByID($id);
 
-        return view('projects.create-edit', compact('RS_Result_Cats', 'RS_Row'));
+        return view('categories.create-edit', compact('RS_Row'));
     }
 
     /**
@@ -103,17 +95,17 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ProjectRequest $request, $id)
+    public function update(StatusRequest $request, $id)
     {
         // Retrieve the validated input data...
         $request->validated();
 
-        $response = $this->projectRepository->update($request, $id);
+        $response = $this->statusRepository->update($request, $id);
 
         Session::flash('messageType', $response['messageType']);
         Session::flash('message', $response['message']);
 
-        return Redirect::route('projects.index');
+        return Redirect::route('categories.index');
     }
 
     /**
@@ -124,7 +116,7 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
-        $response = $this->projectRepository->delete($id);
+        $response = $this->statusRepository->delete($id);
 
         Session::flash('messageType', $response['messageType']);
         Session::flash('message', $response['message']);

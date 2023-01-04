@@ -12,6 +12,8 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\StatusController;
+use App\Http\Controllers\ProjectIssueController;
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
@@ -62,4 +64,8 @@ Route::middleware('auth')->group(function () {
     Route::resources(['categories' => CategoryController::class]);
 
     Route::resources(['projects' => ProjectController::class]);
+
+    Route::resources(['statuses' => StatusController::class]);
+
+    Route::resources(['project-issues' => ProjectIssueController::class]);
 });

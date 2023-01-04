@@ -9,6 +9,8 @@ use App\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Repositories\CategoryRepository;
 use App\Repositories\Interfaces\ProjectRepositoryInterface;
 use App\Repositories\ProjectRepository;
+use App\Repositories\Interfaces\ProjectIssueRepositoryInterface;
+use App\Repositories\ProjectIssueRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -32,6 +34,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             ProjectRepositoryInterface::class,
             ProjectRepository::class
+        );
+
+        $this->app->bind(
+            ProjectIssueRepositoryInterface::class,
+            ProjectIssueRepository::class
         );
     }
 

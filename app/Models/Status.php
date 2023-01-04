@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Project extends Model
+class Status extends Model
 {
     use HasFactory;
 
@@ -15,20 +15,17 @@ class Project extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_id',
-        'category_id',
         'name',
-        'slug',
-        'description',
+        'menu_order',
     ];
 
-    public function category()
+    public function projects()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsToMany(Project::class, 'project_status');
     }
 
-    public function statuses()
+    public function projectIssues()
     {
-        return $this->belongsToMany(Status::class, 'project_status');
+        return $this->hasMany(ProjectIssue::class);
     }
 }

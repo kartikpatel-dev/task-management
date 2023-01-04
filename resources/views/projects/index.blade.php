@@ -6,7 +6,6 @@
     </x-slot>
 
     <div class="py-12">
-
         <div
             class="max-w-7xl mx-auto sm:px-6 lg:px-8 mb-4 flex {{ Session::has('messageType') ? 'justify-between' : 'justify-end' }}">
             @if (Session::has('messageType'))
@@ -77,6 +76,11 @@
                                                     </div>
                                                 </form>
                                             </x-modal>
+
+                                            <x-info-button class="mr-2"><a
+                                                    href="{{ route('projects.show', $RS_Row->id) }}"
+                                                    title="Issue">{{ __('Issue') }}</a>
+                                            </x-info-button>
                                         </center>
                                     </td>
                                 </tr>

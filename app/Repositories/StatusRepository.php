@@ -2,23 +2,22 @@
 
 namespace App\Repositories;
 
-use App\Models\Project;
-use App\Repositories\Interfaces\ProjectRepositoryInterface;
-use Illuminate\Support\Str;
 use App\Models\Status;
+use App\Repositories\Interfaces\StatusRepositoryInterface;
+use Illuminate\Support\Str;
 
-class ProjectRepository implements ProjectRepositoryInterface
+class StatusRepository implements StatusRepositoryInterface
 {
-    private $_title = 'Project';
+    private $_title = 'Status';
 
     public function all()
     {
-        return Project::with(['category'])->latest()->paginate();
+        return Status::latest('menu_order')->paginate();
     }
 
     public function getById($id)
     {
-        return Project::with(['statuses'])->findOrFail($id);
+        return Status::findOrFail($id);
     }
 
     public function store($data)
@@ -63,10 +62,6 @@ class ProjectRepository implements ProjectRepositoryInterface
     {
         $RS_Row = $this->getByID($id);
 
-        if (!empty($RS_Row->image)) {
-            Project::mediaDelete($RS_Row->image);
-        }
-
         $RS_Row->delete($id);
 
         if (!empty($RS_Row)) {
@@ -86,25 +81,15 @@ class ProjectRepository implements ProjectRepositoryInterface
 
     private function _StoreUpdate($data, $id = 0)
     {
-        $RS_Row = empty($id) ? new Project() : $this->getById($id);
+        $RS_Row = empty($id) ? new Status() : $this->getById($id);
 
-        $RS_Row->user_id = auth()->user()->id;
-        $RS_Row->category_id = !empty($data->category_id) ? $data->category_id : NULL;
         $RS_Row->name = $data->name;
-        $RS_Row->slug = Str::slug($data->slug, '');
-        $RS_Row->description = $data->description;
 
-        if ($RS_Row->statuses->count() == 0) {
-            $RS_Row->statuses()->sync($this->_status());
-        }
+        $RS_Row->users()
+            ->sync([auth()->user()->id]);
 
         $RS_Row->save();
 
         return $RS_Row;
-    }
-
-    private function _status()
-    {
-        return Status::whereNull('user_id')->pluck('id')->all();
     }
 }

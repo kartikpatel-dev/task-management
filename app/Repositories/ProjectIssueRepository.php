@@ -2,23 +2,22 @@
 
 namespace App\Repositories;
 
-use App\Models\Project;
-use App\Repositories\Interfaces\ProjectRepositoryInterface;
+use App\Models\ProjectIssue;
+use App\Repositories\Interfaces\ProjectIssueRepositoryInterface;
 use Illuminate\Support\Str;
-use App\Models\Status;
 
-class ProjectRepository implements ProjectRepositoryInterface
+class ProjectIssueRepository implements ProjectIssueRepositoryInterface
 {
-    private $_title = 'Project';
+    private $_title = 'Project Issue';
 
     public function all()
     {
-        return Project::with(['category'])->latest()->paginate();
+        return ProjectIssue::latest('menu_order')->paginate();
     }
 
     public function getById($id)
     {
-        return Project::with(['statuses'])->findOrFail($id);
+        return ProjectIssue::findOrFail($id);
     }
 
     public function store($data)
@@ -63,10 +62,6 @@ class ProjectRepository implements ProjectRepositoryInterface
     {
         $RS_Row = $this->getByID($id);
 
-        if (!empty($RS_Row->image)) {
-            Project::mediaDelete($RS_Row->image);
-        }
-
         $RS_Row->delete($id);
 
         if (!empty($RS_Row)) {
@@ -84,27 +79,28 @@ class ProjectRepository implements ProjectRepositoryInterface
         }
     }
 
+    public function getLastProjectIssue($project_id)
+    {
+        return ProjectIssue::where('project_id', $project_id)
+            ->latest('slug')
+            ->first();
+    }
+
     private function _StoreUpdate($data, $id = 0)
     {
-        $RS_Row = empty($id) ? new Project() : $this->getById($id);
+        $RS_Row = empty($id) ? new ProjectIssue() : $this->getById($id);
 
         $RS_Row->user_id = auth()->user()->id;
-        $RS_Row->category_id = !empty($data->category_id) ? $data->category_id : NULL;
-        $RS_Row->name = $data->name;
-        $RS_Row->slug = Str::slug($data->slug, '');
-        $RS_Row->description = $data->description;
+        $RS_Row->project_id = $data->project_id;
+        $RS_Row->status_id = $data->status_id;
+        $RS_Row->title = $data->issue_title;
 
-        if ($RS_Row->statuses->count() == 0) {
-            $RS_Row->statuses()->sync($this->_status());
-        }
+        $lastSlug = $this->getLastProjectIssue($data->project_id);
+        $lastSlugIndex = !empty($lastSlug) ? substr($lastSlug->slug, strrpos($lastSlug->slug, '-') + 1) + 1 : 1;
+        $RS_Row->slug = $data->project_slug . '-' . $lastSlugIndex;
 
         $RS_Row->save();
 
         return $RS_Row;
-    }
-
-    private function _status()
-    {
-        return Status::whereNull('user_id')->pluck('id')->all();
     }
 }

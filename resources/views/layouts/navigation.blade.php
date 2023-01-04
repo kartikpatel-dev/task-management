@@ -23,7 +23,7 @@
                     @endif
 
                     @if (Route::has('projects.create'))
-                        <x-nav-link :href="route('projects.index')" :active="request()->routeIs('projects.index') || request()->is('categories/*')">
+                        <x-nav-link :href="route('projects.index')" :active="request()->routeIs('projects.index') || request()->is('projects/*')">
                             {{ __('Projects') }}
                         </x-nav-link>
                     @endif
