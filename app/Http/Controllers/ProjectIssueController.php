@@ -97,4 +97,30 @@ class ProjectIssueController extends Controller
     {
         //
     }
+
+    /**
+     * change status
+     */
+    public function changeStatus(Request $request)
+    {
+        $response = $this->projectIssueRepository->changeStatus($request);
+
+        return response()->json([
+            'messageType' => $response['messageType'],
+            'message' => $response['message']
+        ]);
+    }
+
+    /**
+     * change menu order
+     */
+    public function changeMenuOrder(Request $request)
+    {
+        $response = $this->projectIssueRepository->changeMenuOrder($request);
+        
+        return response()->json([
+            'messageType' => $response['messageType'],
+            'message' => $response['message']
+        ]);
+    }
 }

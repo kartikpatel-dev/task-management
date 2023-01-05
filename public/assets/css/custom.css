@@ -1,0 +1,117 @@
+/* Colors */
+:root {
+    --color-default: #f8f9fa;
+    --color-primary: #007bff;
+    --color-secondary: #6c757d;
+    --color-success: #28a745;
+    --color-info: #17a2b8;
+    --color-danger: #dc3545;
+    --color-warning: #ffc107;
+    --color-light: #f8f9fa;
+    --color-dark: #343a40;
+}
+
+/* text color */
+.text-default {
+    color: var(--color-default);
+}
+
+.text-primary {
+    color: var(--color-primary);
+}
+
+.text-secondary {
+    color: var(--color-secondary);
+}
+
+.text-success {
+    color: var(--color-success);
+}
+
+.text-info {
+    color: var(--color-info);
+}
+
+.text-danger {
+    color: var(--color-danger);
+}
+
+.text-warning {
+    color: var(--color-warning);
+}
+
+.text-light {
+    color: var(--color-light);
+}
+
+.text-dark {
+    color: var(--color-dark);
+}
+
+/* background color */
+.bg-default {
+    background-color: var(--color-default);
+}
+
+.bg-primary {
+    background-color: var(--color-primary);
+}
+
+.bg-secondary {
+    background-color: var(--color-secondary);
+}
+
+.bg-success {
+    background-color: var(--color-success);
+}
+
+.bg-info {
+    background-color: var(--color-info);
+}
+
+.bg-danger {
+    background-color: var(--color-danger);
+}
+
+.bg-warning {
+    background-color: var(--color-warning);
+}
+
+.bg-light {
+    background-color: var(--color-light);
+}
+
+.bg-dark {
+    background-color: var(--color-dark);
+}
+
+
+.issue_list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* width */
+.issue_list::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+.issue_list::-webkit-scrollbar-track {
+    background-color: var(--color-light);
+}
+
+/* Handle */
+.issue_list::-webkit-scrollbar-thumb {
+    background: var(--color-dark);
+}
+
+/* Handle on hover */
+.issue_list::-webkit-scrollbar-thumb:hover {
+    background: var(--color-secondary);
+}
+
+.status_item .status_item_title {
+    position: sticky;
+    top: 0;
+}

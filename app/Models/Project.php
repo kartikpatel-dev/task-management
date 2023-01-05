@@ -29,6 +29,6 @@ class Project extends Model
 
     public function statuses()
     {
-        return $this->belongsToMany(Status::class, 'project_status');
+        return $this->belongsToMany(Status::class, 'project_status')->with(['projectIssues']);
     }
 }

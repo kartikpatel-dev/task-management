@@ -15,26 +15,27 @@
             </header>
 
             @if ($RS_Row->statuses->count() > 0)
-                <ul class="lg:gap-4 sm:gap-8 grid grid-cols-12 col-span-10 col-start-2 gap-3">
+                <ul class="status_list lg:gap-4 sm:gap-8 grid grid-cols-12 col-span-10 col-start-2 gap-3">
                     @foreach ($RS_Row->statuses as $RS_Row_Status)
                         <li
-                            class="card bg-white shadow-sm sm:rounded-lg p-4 group mb-6 md:md-0 col-span-12 sm:col-span-6 lg:col-span-3 group-link-underline">
-                            <h3 class="bg-gray-200 text-lg mb-2 py-1 px-2 font-bold">
+                            class="status_item bg-white shadow-sm sm:rounded-lg pb-4 group mb-6 md:md-0 col-span-12 sm:col-span-6 lg:col-span-3 group-link-underline">
+                            <h3 class="status_item_title bg-gray-200 text-lg py-1 px-2 font-bold">
                                 {{ $RS_Row_Status->name }}
-                                <span class="issue_count">{{ $RS_Row_Status->projectIssues->count() == 0 ? __('0 issue') : ($RS_Row_Status->projectIssues->count() == 1 ? __('1 issue') : $RS_Row_Status->projectIssues->count() . __(' issues')) }}</span>
+                                <span
+                                    class="issue_count {{ Str::slug($RS_Row_Status->name) }}">{{ $RS_Row_Status->projectIssues->count() == 0 ? __('0 issue') : ($RS_Row_Status->projectIssues->count() == 1 ? __('1 issue') : $RS_Row_Status->projectIssues->count() . __(' issues')) }}</span>
                             </h3>
 
-                            <div class="issue-sortable issue_list">
+                            <div class="issue-sortable issue_list p-4 status_{{ $RS_Row_Status->id }}" data-class="{{ Str::slug($RS_Row_Status->name) }}"
+                                data-status-id="{{ $RS_Row_Status->id }}">
                                 @if ($RS_Row_Status->projectIssues->count() > 0)
                                     @foreach ($RS_Row_Status->projectIssues as $RS_Row_ProIssue)
-                                        <div class="issue-draggable issue_list_item bg-gray-100 mb-1 p-2 border">
-                                            <p>{{ $RS_Row_ProIssue->title }} {{ $RS_Row_Status->id }}</p>
-                                            <p class="text-gray-500">{{ $RS_Row_ProIssue->slug }}</p>
-                                        </div>
+                                        @if ($RS_Row->id == $RS_Row_ProIssue->project_id)
+                                            @include('projects.issue_item')
+                                        @endif
                                     @endforeach
                                 @endif
 
-                                <div class="issue_list_item create_issue_main">
+                                <div class="issue_list_item create_issue_main" data-project-id="{{ $RS_Row->id }}">
                                     <div class="create_issue_tile">{{ __('+ Create issue') }}</div>
                                     <div class="create_issue_form">
                                         <x-textarea data-project-id="{{ $RS_Row->id }}"

@@ -26,6 +26,6 @@ class Status extends Model
 
     public function projectIssues()
     {
-        return $this->hasMany(ProjectIssue::class);
+        return $this->hasMany(ProjectIssue::class)->latest('menu_order');
     }
 }

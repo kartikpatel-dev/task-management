@@ -68,4 +68,6 @@ Route::middleware('auth')->group(function () {
     Route::resources(['statuses' => StatusController::class]);
 
     Route::resources(['project-issues' => ProjectIssueController::class]);
+    Route::post('project-issues-change-status', [ProjectIssueController::class, 'changeStatus'])->name('project-issues.change.status');
+    Route::post('project-issues-change-menu-order', [ProjectIssueController::class, 'changeMenuOrder'])->name('project-issues.change.menu.order');
 });

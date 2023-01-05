@@ -22,5 +22,5 @@
     RewriteRule ^ index.php [L]
 
     RewriteCond %{REQUEST_URI} !^/public/
-    RewriteRule ^(css|js|img|images|fonts|vendor|build|pdf|admin)/(.*)$ public/$1/$2 [L,NC]
+    RewriteRule ^(css|js|img|images|fonts|vendor|build|pdf|admin|assets)/(.*)$ public/$1/$2 [L,NC]
 </IfModule>
