@@ -73,6 +73,10 @@
                             if (response.messageType == 'success') {
                                 $('.issue_list.status_' + status_id).prepend(response.data);
                                 $(".issue_title").val('');
+
+                                jQuery('.issue_list.status_' + status_id).animate({
+                                    scrollTop: 0
+                                }, 'slow');
                             }
                         },
                         error: function(response) {},
@@ -86,14 +90,14 @@
                 connectWith: ".issue-sortable",
                 create: function(event, ui) {
                     $('.issue_count.' + $(this).data('class')).html(issueCount($(this).children()
-                        .length - 1));
+                        .length));
                 },
                 receive: function(event, ui) {
                     $('.issue_count.' + $(this).data('class')).html(issueCount($(this).children()
-                        .length - 1));
+                        .length));
                     $('.issue_count.' + $(ui.sender).data('class')).html(issueCount($(ui.sender)
                         .children()
-                        .length - 1));
+                        .length));
 
                     let project_issue_id = ui.item.data('project-issue-id');
                     let status_id = $(this).data('status-id');

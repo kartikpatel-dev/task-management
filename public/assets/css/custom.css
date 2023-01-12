@@ -111,7 +111,11 @@
     background: var(--color-secondary);
 }
 
-.status_item .status_item_title {
+.status_item .status_item_heading {
     position: sticky;
     top: 0;
+}
+
+.issue_list .issue_item {
+    cursor: pointer;
 }
