@@ -94,11 +94,11 @@ class ProjectRepository implements ProjectRepositoryInterface
         $RS_Row->slug = Str::slug($data->slug, '');
         $RS_Row->description = $data->description;
 
+        $RS_Row->save();
+
         if ($RS_Row->statuses->count() == 0) {
             $RS_Row->statuses()->sync($this->_status());
         }
-
-        $RS_Row->save();
 
         return $RS_Row;
     }
